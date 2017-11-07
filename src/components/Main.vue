@@ -79,7 +79,7 @@
     realloc () {
       console.log('realloc', this.elements);
       let arrayLength = this.elements.length;
-      for(let j = 0; j < arrayLength; j++){
+      for(let j = 0; j <= arrayLength; j++){
         this.elements.push(null);
       }
       console.log('realloc-end', this.elements);

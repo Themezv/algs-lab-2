@@ -1,15 +1,16 @@
 <template>
   <div>
-    <svg width="100%" height="600" viewBox="0 0 600 600">
+    <svg width="100%" height="600" viewBox="0 0 1100 1100">
       <svgNode
-        v-for="(node, index) in tree.elements.filter(element => !!element)"
-        :x="600/2"
-        :y="110*Math.floor(Math.log2(index+1))" :width="100"
+        v-for="(node, index) in tree.elements"
+        :x="600/2 - 110*Math.pow(Math.floor(Math.log2(index+1)),2) + 165*index"
+        :y="110*Math.floor(Math.log2(index+1))"
+        :width="100"
         :height="100" :stroke-width="2"
-        :fill="'#ff0000'"
+        :fill="node?'#ff0000':'#fff'"
         v-b-popover.hover.auto="node?`Value: ${node.value}`:''"
         :title="node?`key: ${node.key}`:''"
-        :key="node.key"
+        :key="index"
       >
       </svgNode>
     </svg>
