@@ -1,7 +1,7 @@
-import HelloWorld from './HelloWorld.vue'
-import SvgMain from './SvgMain.vue'
+import Main from './Main'
+import SvgMain from './SvgMain'
 
 export {
-  HelloWorld,
-  SvgMain
+  SvgMain,
+  Main
 }
