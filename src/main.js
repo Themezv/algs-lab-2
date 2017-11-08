@@ -59,7 +59,7 @@ Vue.component('svgNode', {
       }
     }
   },
-  template: '<g :key="key"><rect :x="x" :y="y" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect><text :style="styleObject" :x="x + 0.15*width" :y="y+height - 0.1*height" font-family="Verdana">{{kv}}</text></g>'
+  template: '<g><rect :x="x" :y="y" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect><text :style="styleObject" :x="x + 0.15*width" :y="y+height - 0.1*height" font-family="Verdana">{{kv}}</text></g>'
 });
 
 /* eslint-disable no-new */
