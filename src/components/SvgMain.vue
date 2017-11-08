@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg id="mainsvg" width="100%" height="600" viewBox="0 0 1100 1100">
+    <svg id="mainsvg" width="100%" height="600" :view-box.camel="'0 0 ' + viewx + ' ' + viewy" @wheel.self.prevent="resize">
       <svgNode
         v-for="(node, index) in tree.elements"
         :x="600/getCountInLevel(getLevel(index)) + 2*(600/getCountInLevel(getLevel(index)))*getNumInRow(index)"
@@ -55,13 +55,20 @@ export default {
   props: ['tree'],
   data () {
     return {
-      fill: '#ff0033'
+      fill: '#ff0033',
+      viewx: 1100,
+      viewy: 1100,
+      viewbox: `0 0 1100 1100`
     }
   },
   methods: {
     getLevel: getLevel,
     getNumInRow,
     getCountInLevel,
+    resize: function (e) {
+      this.viewx+= e.deltaY;
+      this.viewy+= e.deltaY;
+    }
   }
 }
 </script>
