@@ -73,6 +73,9 @@
     getRightChildIndex (index) {
       return 2*index + 1;
     }
+    getParentNode(index) {
+      return Math.floor((index-1)/2)
+    }
     clearTree () {
       this.elements.splice(0)
     }

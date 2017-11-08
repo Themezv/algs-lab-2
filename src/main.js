@@ -20,7 +20,10 @@ Vue.component('svgLine', {
       type: String,
       default: '#000'
     },
-    strokeWidth: Number
+    strokeWidth: {
+      type: Number,
+      default: 1,
+    }
   },
   data: function () {
     return {
@@ -44,7 +47,7 @@ Vue.component('svgNode', {
       type: String,
       default: '#fff'
     },
-    strokeWidth: Number
+    strokeWidth: Number,
   },
   data: function () {
     return {
