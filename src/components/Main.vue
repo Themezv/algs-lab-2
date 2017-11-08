@@ -3,9 +3,23 @@
     <b-container fluid>
       <b-row>
         <b-col md="9">
-          <SvgMain :tree="tree" />
+          <SvgMain :tree="tree"/>
         </b-col>
         <b-col md="3">
+          <b-list-group>
+            <b-list-group-item>
+              Размер дерева
+              <b-badge>{{tree.getLevel(tree.elements.length)}}</b-badge>
+            </b-list-group-item>
+            <b-list-group-item>
+              Количество элементов
+              <b-badge>{{tree.elements.filter(element => !!element).length}}</b-badge>
+            </b-list-group-item>
+            <b-list-group-item>
+              This is a text only item
+              <b-badge>New</b-badge>
+            </b-list-group-item>
+          </b-list-group>
           <span class="text-success">Artem Zverev</span><br>
           <b-input-group>
             <b-input-group-addon>
@@ -39,60 +53,83 @@
   import Vue from 'vue'
 
   class Tree {
-    constructor () {
+    constructor() {
       this.elements = []
     }
-    addNode (node) {
+
+    addNode(node) {
       if (this.elements.length < 1) {
         this.elements.push(node, null, null);
         console.log('Push root element', node, this.elements);
         return;
       }
-      for(let i = 0; i < this.elements.length; i++){
-        if(!this.elements[i]){
+      for (let i = 0; i < this.elements.length; i++) {
+        if (!this.elements[i]) {
           Vue.set(this.elements, i, node);
           console.log('Push element', node, this.elements);
           return;
         }
-        if(this.elements[i].key > node.key){
-          i = i*2;
-          console.log('left', i+1);
+        if (this.elements[i].key > node.key) {
+          i = i * 2;
+          console.log('left', i + 1);
         }
         else {
-          i = i*2 + 1;
-          console.log('right', i+1);
+          i = i * 2 + 1;
+          console.log('right', i + 1);
         }
-        if (i+1  >= this.elements.length){
+        if (i + 1 >= this.elements.length) {
           this.realloc();
         }
       }
     }
-    getLeftChildIndex (index) {
-      return 2*index;
+
+    getLeftChildIndex(index) {
+      return 2 * index;
     }
-    getRightChildIndex (index) {
-      return 2*index + 1;
+
+    getRightChildIndex(index) {
+      return 2 * index + 1;
     }
+
     getParentNode(index) {
-      return Math.floor((index-1)/2)
+      return Math.floor((index - 1) / 2)
     }
-    clearTree () {
+
+    clearTree() {
       this.elements.splice(0)
     }
-    realloc () {
+
+    realloc() {
       console.log('realloc', this.elements);
       let arrayLength = this.elements.length;
-      for(let j = 0; j <= arrayLength; j++){
+      for (let j = 0; j <= arrayLength; j++) {
         this.elements.push(null);
       }
       console.log('realloc-end', this.elements);
     }
 
+    getLevel(index) {
+      return Math.floor(Math.log2(index + 1));
+    }
+
+    getCountInLevel(level) {
+      return Math.pow(2, level);
+    }
+
+    getNumInRow(index) {
+      let i = 1;
+      let index2 = index;
+      while (i < this.getCountInLevel(this.getLevel(index))) {
+        index2 -= i;
+        i *= 2;
+      }
+      return index2;
+    }
   }
 
   export default {
     name: 'Main',
-    data () {
+    data() {
       return {
         newKey: '',
         newValue: '',

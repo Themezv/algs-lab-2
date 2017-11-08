@@ -48,13 +48,18 @@ Vue.component('svgNode', {
       default: '#fff'
     },
     strokeWidth: Number,
+    kv: Number,
   },
   data: function () {
     return {
-      ...this.props
+      ...this.props,
+      styleObject: {
+        fontSize: String(this.width) + 'px',
+        textAlign: 'center'
+      }
     }
   },
-  template: '<rect :x="x" :y="y" :key="key" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect>'
+  template: '<g :key="key"><rect :x="x" :y="y" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect><text :style="styleObject" :x="x + 0.15*width" :y="y+height - 0.1*height" font-family="Verdana">{{kv}}</text></g>'
 });
 
 /* eslint-disable no-new */
