@@ -44,6 +44,17 @@
               <b-btn @click="removeNodeByKey" variant="danger">Удалить</b-btn>
             </b-input-group-button>
           </b-input-group>
+          <b-input-group class="mt-2">
+            <b-input-group-button slot="right">
+              <b-btn @click="getMinimum" variant="secondary">Найти минимум</b-btn>
+            </b-input-group-button>
+            <b-input-group-button slot="right">
+              <b-btn @click="getNext" variant="secondary">Найти следующий</b-btn>
+            </b-input-group-button>
+            <b-input-group-button slot="right">
+              <b-btn @click="findKeyK" variant="secondary">Найти k ключ</b-btn>
+            </b-input-group-button>
+          </b-input-group>
           <!--{{tree.elements}}-->
           <br>
           <b-btn @click="clearTree" variant="danger">Очистить дерево </b-btn>
@@ -144,11 +155,11 @@
       return {result: false, steps}
     }
 
-    getLeftChildIndex(index) {
+    getLeftChild(index) {
       return 2 * index;
     }
 
-    getRightChildIndex(index) {
+    getRightChild(index) {
       return 2 * index + 1;
     }
 
@@ -158,6 +169,41 @@
 
     clearTree() {
       this.elements.splice(0)
+    }
+
+    findKeyK(k){
+      let key = this.getMinimum(0);
+      for(let count=0; count < k; count++) {
+        key = this.getNext(key);
+      }
+      if (key === false){
+        return false;
+      }
+      return this.elements[key].key;
+    }
+
+    getMinimum(index){
+      if (!this.elements[index*2+1]){
+        return index;
+      }
+      return this.getMinimum(index*2+1);
+    }
+
+    getNext(index) {
+      if (this.elements[index*2+2]){
+        return this.getMinimum(index*2+2);
+      }
+      let y = this.getParentNode(index);
+      let x = index;
+      console.log(this.elements[y], x, y*2+2);
+      while (this.elements[y] && x === y*2+2) {
+        x = +y;
+        y = this.getParentNode(y);
+      }
+      if (y === -1){
+        return false;
+      }
+      return y;
     }
 
     realloc() {
@@ -205,6 +251,7 @@
     },
     methods: {
       addNode: function () {
+        this.clearMsg();
         let count = this.tree.addNode({key: +this.newKey, value: this.newValue});
         this.setSuccessAlert(`Добавлен узел с ключом ${+this.newKey}, итераций: ${count}`);
       },
@@ -221,7 +268,13 @@
       setInfoAlert: function(msg){
         this.infoAlert = msg;
       },
+      clearMsg: function () {
+        this.setErrorsAlert('');
+        this.setInfoAlert('');
+        this.setSuccessAlert('');
+      },
       findNodeByKey: function () {
+        this.clearMsg();
         let key = +this.newKey;
         let answer = this.tree.findNodeByKey(key);
         console.log('ANSWER', answer);
@@ -231,6 +284,7 @@
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
       },
       removeNodeByKey: function () {
+        this.clearMsg();
         let key = +this.newKey;
         let answer = this.tree.findNodeByKey(key, true);
         console.log('ANSWER', answer);
@@ -239,6 +293,35 @@
           :
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
       },
+      getMinimum: function () {
+        this.clearMsg();
+        let key = +this.newKey;
+        let index = this.tree.elements.findIndex(element => element && element.key === key);
+        console.log('INDEX', index);
+        if(index === -1){
+          this.setErrorsAlert(`Элемент с ключом ${key} не найден`);
+          return;
+        }
+        let answer = this.tree.getMinimum(index);
+        this.setSuccessAlert(`Минимальный ключ: ${this.tree.elements[answer].key}`)
+      },
+      getNext: function () {
+        this.clearMsg();
+        let key = +this.newKey;
+        let index = this.tree.elements.findIndex(element => element && element.key === key);
+        let next = this.tree.getNext(index);
+        next!==false?
+        this.setSuccessAlert(`Следующий элемент: ${this.tree.elements[next].key}`) :
+          this.setErrorsAlert(`Следующий элемент отсутствует`);
+      },
+      findKeyK: function () {
+        this.clearMsg();
+        let key = +this.newKey;
+        let answer = this.tree.findKeyK(key);
+        answer?
+          this.setSuccessAlert(`k-ый ключ: ${answer}`):
+          this.setErrorsAlert(`k-ый ключ не найден`)
+      }
     },
     components: {SvgMain}
   }
