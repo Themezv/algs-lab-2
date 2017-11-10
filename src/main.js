@@ -55,7 +55,8 @@ Vue.component('svgNode', {
       ...this.props,
       styleObject: {
         fontSize: String(this.width) + 'px',
-        textAlign: 'center'
+        textAlign: 'center',
+        userSelect: 'none',
       }
     }
   },

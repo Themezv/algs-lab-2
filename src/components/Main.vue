@@ -41,7 +41,7 @@
               <b-btn @click="findNodeByKey" variant="info">Получить</b-btn>
             </b-input-group-button>
             <b-input-group-button slot="right">
-              <b-btn variant="danger">Удалить</b-btn>
+              <b-btn @click="removeNodeByKey" variant="danger">Удалить</b-btn>
             </b-input-group-button>
           </b-input-group>
           <!--{{tree.elements}}-->
@@ -91,6 +91,29 @@
       }
     }
 
+    remove(parentKey){
+      console.log('Remove', parentKey);
+      if(!this.elements[parentKey]){
+        return;
+      }
+      let leftChild = this.elements[parentKey*2+1];
+      let rightChild = this.elements[parentKey*2+2];
+      if(!leftChild && !rightChild){
+        console.log('Нет детей');
+        Vue.set(this.elements, parentKey, null);
+      }
+      else if (leftChild && rightChild){
+        console.log('Есть оба');
+        Vue.set(this.elements, parentKey, this.elements[parentKey*2+2]);
+        this.remove(parentKey*2+2);
+      }
+      else {
+        console.log('Есть только один', !rightChild?parentKey*2+1:parentKey*2+2);
+        Vue.set(this.elements, parentKey, this.elements[!rightChild?parentKey*2+1:parentKey*2+2]);
+        this.remove(!rightChild?parentKey*2+1:parentKey*2+2);
+      }
+    }
+
     findNodeByKey(key, del=false) {
       console.log('FIND_BY_KEY', typeof key, key);
       let steps = 0;
@@ -104,18 +127,13 @@
           i = i * 2 + 1;
         }
         else if(!!this.elements[i] && this.elements[i].key === key) {
-          console.log('KKK');
           if(!del){
             console.log('RETURN WITHOUT DEL');
             return {result: this.elements[i].value, steps}
           }
           else {
-            if(!this.elements[i*2+1] && !this.elements[i*2+2]){
-              Vue.set(this.elements, i, null);
-              this.parent.setInfoAlert(`Найден узел с ключом ${key}. Потомки отсутствуют`);
-            } else if(!this.elements[i*2+1]){
-              Vue.set(this.elements, i, null);
-            }
+            this.remove(i);
+            return {result: true, steps: 11};
           }
         }
         if (i >= this.elements.length) {
@@ -211,7 +229,16 @@
           this.setSuccessAlert(`С ключом ${key} найден узел со значением ${answer.result}. Итераций: ${answer.steps}`)
           :
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
-      }
+      },
+      removeNodeByKey: function () {
+        let key = +this.newKey;
+        let answer = this.tree.findNodeByKey(key, true);
+        console.log('ANSWER', answer);
+        answer.result ?
+          this.setSuccessAlert(`С ключом ${key} найден узел со значением ${answer.result}. Итераций: ${answer.steps}`)
+          :
+          this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
+      },
     },
     components: {SvgMain}
   }
