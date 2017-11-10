@@ -19,7 +19,7 @@
               <b-badge>{{tree.elements.filter(element => !!element).length}}</b-badge>
             </b-list-group-item>
           </b-list-group>
-          <span class="text-success">Artem Zverev</span><br>
+          <span class="text-success">Artem Zverev & Yura Beymo</span><br>
           <b-input-group>
             <b-input-group-addon>
               Value
@@ -52,12 +52,18 @@
               <b-btn @click="getNext" variant="secondary">Найти следующий</b-btn>
             </b-input-group-button>
             <b-input-group-button slot="right">
-              <b-btn @click="findKeyK" variant="secondary">Найти k ключ</b-btn>
+              <b-btn @click="findKeyK" variant="secondary">Найти {{newKey}} ключ</b-btn>
             </b-input-group-button>
           </b-input-group>
-          <!--{{tree.elements}}-->
-          <br>
-          <b-btn @click="clearTree" variant="danger">Очистить дерево </b-btn>
+          <b-input-group class="mt-2 justify-content-center">
+            <b-input-group-button slot="right">
+              <b-btn @click="initTree" variant="info">Инициировать дерево</b-btn>
+            </b-input-group-button>
+            <b-input-group-button slot="right">
+              <b-btn @click="clearTree" variant="danger">Очистить дерево </b-btn>
+            </b-input-group-button>
+          </b-input-group>
+
         </b-col>
       </b-row>
     </b-container>
@@ -100,6 +106,11 @@
           this.realloc();
         }
       }
+    }
+
+    initTree(){
+      const elements = [4,2,6,3,5,1,8,7].map(element => ({key: element, value: element}));
+      elements.forEach(element => this.addNode(element));
     }
 
     remove(parentKey){
@@ -279,7 +290,7 @@
         let answer = this.tree.findNodeByKey(key);
         console.log('ANSWER', answer);
         answer.result ?
-          this.setSuccessAlert(`С ключом ${key} найден узел со значением ${answer.result}. Итераций: ${answer.steps}`)
+          this.setSuccessAlert(`Удален узел с ключом ${key}`)
           :
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
       },
@@ -319,8 +330,12 @@
         let key = +this.newKey;
         let answer = this.tree.findKeyK(key);
         answer?
-          this.setSuccessAlert(`k-ый ключ: ${answer}`):
-          this.setErrorsAlert(`k-ый ключ не найден`)
+          this.setSuccessAlert(`${key}-ый ключ: ${answer}`):
+          this.setErrorsAlert(`${key}-ый ключ не найден`)
+      },
+      initTree: function () {
+        this.tree.initTree();
+        this.setSuccessAlert('Иницировано дерево');
       }
     },
     components: {SvgMain}
