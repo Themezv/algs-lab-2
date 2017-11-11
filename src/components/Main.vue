@@ -127,8 +127,8 @@
       }
       else if (leftChild && rightChild){
         console.log('Есть оба');
-        Vue.set(this.elements, parentKey, this.elements[parentKey*2+2]);
-        this.remove(parentKey*2+2);
+        Vue.set(this.elements, parentKey, this.elements[parentKey*2+1]);
+        this.remove(parentKey*2+1);
       }
       else {
         console.log('Есть только один', !rightChild?parentKey*2+1:parentKey*2+2);
