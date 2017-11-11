@@ -6,6 +6,7 @@
           <SvgMain :tree="tree"/>
         </b-col>
         <b-col md="4">
+          <h2>Бинарное дерево поиска</h2>
           <b-alert :show="dismissCountDown" dismissible @dismissed="dismissCountDown=0" v-if="!!infoAlert.length"  variant="info" show>{{infoAlert}}</b-alert>
           <b-alert v-if="!!successAlert.length"  variant="success" show>{{successAlert}}</b-alert>
           <b-alert v-if="!!errorsAlert.length"  variant="danger" show>{{errorsAlert}}</b-alert>
@@ -290,7 +291,7 @@
         let answer = this.tree.findNodeByKey(key);
         console.log('ANSWER', answer);
         answer.result ?
-          this.setSuccessAlert(`Удален узел с ключом ${key}`)
+          this.setSuccessAlert(`С ключом ${key} найден узел со значением ${answer.result}. Итераций: ${answer.steps}`)
           :
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
       },
@@ -300,7 +301,7 @@
         let answer = this.tree.findNodeByKey(key, true);
         console.log('ANSWER', answer);
         answer.result ?
-          this.setSuccessAlert(`С ключом ${key} найден узел со значением ${answer.result}. Итераций: ${answer.steps}`)
+          this.setSuccessAlert(`Удален узел с ключом ${key}`)
           :
           this.setErrorsAlert(`Узла с ключом ${key} не найдено. Итераций: ${answer.steps}`);
       },
