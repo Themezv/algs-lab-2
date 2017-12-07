@@ -127,8 +127,8 @@
       }
       else if (leftChild && rightChild){
         console.log('Есть оба');
-        Vue.set(this.elements, parentKey, this.elements[parentKey*2+1]);
-        this.remove(parentKey*2+1);
+        Vue.set(this.elements, parentKey, this.elements[this.getNext(parentKey)]);
+        this.remove(this.getNext(parentKey));
       }
       else {
         console.log('Есть только один', !rightChild?parentKey*2+1:parentKey*2+2);
@@ -187,6 +187,9 @@
       let key = this.getMinimum(0);
       for(let count=0; count < k; count++) {
         key = this.getNext(key);
+        if (key === false) {
+          return false;
+        }
       }
       if (key === false){
         return false;

@@ -54,13 +54,13 @@ Vue.component('svgNode', {
     return {
       ...this.props,
       styleObject: {
-        fontSize: String(this.width) + 'px',
+        fontSize: String(this.width-30) + 'px',
         textAlign: 'center',
         userSelect: 'none',
       }
     }
   },
-  template: '<g><rect :x="x" :y="y" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect><text :style="styleObject" :x="x + 0.15*width" :y="y+height - 0.1*height" font-family="Verdana">{{kv}}</text></g>'
+  template: '<g><rect :x="x" :y="y" :width="width" :height="height" :fill="fill" :stroke="stroke" :stroke-width="strokeWidth"></rect><text :style="styleObject" :x="x + 0.15*width" :y="y+height - 0.2*height" font-family="Verdana">{{kv}}</text></g>'
 });
 
 /* eslint-disable no-new */
